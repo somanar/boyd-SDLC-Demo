@@ -24,4 +24,9 @@ public class OrderRepository {
     public Optional<Order> findById(String id) {
         return Optional.ofNullable(orders.get(id));
     }
+
+    public boolean existsByCustomerId(String customerId) {
+        return orders.values().stream()
+                .anyMatch(order -> order.getCustomerId().equals(customerId));
+    }
 }

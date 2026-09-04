@@ -16,6 +16,8 @@ public class Order {
     private final BigDecimal total;
     private final OrderStatus status;
     private final Instant createdAt;
+    private final String appliedDiscountCode;
+    private final BigDecimal discountAmount;
 
     public Order(String id,
                  String customerId,
@@ -23,7 +25,9 @@ public class Order {
                  BigDecimal subtotal,
                  BigDecimal total,
                  OrderStatus status,
-                 Instant createdAt) {
+                 Instant createdAt,
+                 String appliedDiscountCode,
+                 BigDecimal discountAmount) {
         this.id = id;
         this.customerId = customerId;
         this.items = items;
@@ -31,6 +35,8 @@ public class Order {
         this.total = total;
         this.status = status;
         this.createdAt = createdAt;
+        this.appliedDiscountCode = appliedDiscountCode;
+        this.discountAmount = discountAmount;
     }
 
     public String getId() {
@@ -59,5 +65,13 @@ public class Order {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public String getAppliedDiscountCode() {
+        return appliedDiscountCode;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
     }
 }

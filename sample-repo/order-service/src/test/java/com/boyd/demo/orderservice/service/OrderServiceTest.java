@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class OrderServiceTest {
 
-    private final OrderService orderService = new OrderService(new OrderRepository());
+    private final OrderRepository orderRepository = new OrderRepository();
+    private final OrderService orderService = new OrderService(orderRepository, new DiscountService(orderRepository));
 
     @Test
     void createsOrderWithComputedSubtotal() {

@@ -3,6 +3,7 @@ package com.boyd.demo.orderservice.service;
 import com.boyd.demo.orderservice.dto.CreateOrderRequest;
 import com.boyd.demo.orderservice.dto.OrderItemRequest;
 import com.boyd.demo.orderservice.exception.OrderNotFoundException;
+import com.boyd.demo.orderservice.model.DiscountResult;
 import com.boyd.demo.orderservice.model.Order;
 import com.boyd.demo.orderservice.model.OrderItem;
 import com.boyd.demo.orderservice.model.OrderStatus;
@@ -24,7 +25,6 @@ import java.util.UUID;
  * findings to surface:
  *   - createOrder does not validate empty item lists or non-positive quantities.
  *   - The customer identifier is written to the application log at INFO.
- *   - There is no discount handling yet (that is feature ticket PROJ-142).
  */
 @Service
 public class OrderService {
@@ -32,9 +32,11 @@ public class OrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
+    private final DiscountService discountService;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, DiscountService discountService) {
         this.orderRepository = orderRepository;
+        this.discountService = discountService;
     }
 
     public Order createOrder(CreateOrderRequest request) {
@@ -53,8 +55,17 @@ public class OrderService {
 
         BigDecimal subtotal = calculateSubtotal(items);
 
-        // Demo seed: no discount applied yet; total simply mirrors subtotal.
         BigDecimal total = subtotal;
+        String appliedDiscountCode = null;
+        BigDecimal discountAmount = BigDecimal.ZERO;
+
+        String discountCode = request.getDiscountCode();
+        if (discountCode != null && !discountCode.isBlank()) {
+            DiscountResult result = discountService.apply(discountCode, subtotal, request.getCustomerId());
+            appliedDiscountCode = result.getCode();
+            discountAmount = result.getDiscountAmount();
+            total = result.getTotal();
+        }
 
         Order order = new Order(
                 UUID.randomUUID().toString(),
@@ -63,7 +74,9 @@ public class OrderService {
                 subtotal,
                 total,
                 OrderStatus.CREATED,
-                Instant.now());
+                Instant.now(),
+                appliedDiscountCode,
+                discountAmount);
 
         return orderRepository.save(order);
     }

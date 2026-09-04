@@ -12,6 +12,8 @@ public class OrderResponse {
     private final String id;
     private final String customerId;
     private final BigDecimal subtotal;
+    private final String discountCode;
+    private final BigDecimal discountAmount;
     private final BigDecimal total;
     private final String status;
 
@@ -19,6 +21,8 @@ public class OrderResponse {
         this.id = order.getId();
         this.customerId = order.getCustomerId();
         this.subtotal = order.getSubtotal();
+        this.discountCode = order.getAppliedDiscountCode();
+        this.discountAmount = order.getDiscountAmount();
         this.total = order.getTotal();
         this.status = order.getStatus().name();
     }
@@ -33,6 +37,14 @@ public class OrderResponse {
 
     public BigDecimal getSubtotal() {
         return subtotal;
+    }
+
+    public String getDiscountCode() {
+        return discountCode;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
     }
 
     public BigDecimal getTotal() {
