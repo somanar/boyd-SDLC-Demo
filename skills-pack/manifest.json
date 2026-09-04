@@ -1,0 +1,18 @@
+{
+  "package": "boyd-ai-sdlc-skills",
+  "skills": [
+    "analyze-requirement",
+    "create-user-story",
+    "generate-technical-design",
+    "architecture-review",
+    "generate-code",
+    "code-review",
+    "security-review",
+    "generate-unit-tests",
+    "generate-test-cases",
+    "root-cause-analysis",
+    "generate-documentation",
+    "release-readiness-review"
+  ],
+  "count": 12
+}
